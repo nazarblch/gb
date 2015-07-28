@@ -59,6 +59,14 @@ public abstract class Recommender implements Runnable {
       return null;
     }
 
+	public void saveUserFactors() throws Exception {
+
+	}
+
+	public void loadUserFactors() throws Exception {
+
+	}
+
     public DenseVector getItemFactors(int i) throws Exception {
         return null;
     }

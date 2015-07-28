@@ -1,0 +1,4 @@
+Dataset: /home/nazar/gb/data/ratings.txt
+With Setup: cv -k 4 -p on --rand-seed 1 --test-view all
+BiasedMF,1.434032,1.866702,0.286806,1.433962,1.866901,0.892614,,10, 0.01, -1.0, 0.1, 0.1, 0.1, 50, true,'00:01','00:00'
+

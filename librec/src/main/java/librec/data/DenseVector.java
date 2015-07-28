@@ -281,7 +281,16 @@ public class DenseVector implements Serializable {
 
 	@Override
 	public String toString() {
-		return Strings.toString(data);
+		StringBuilder sb = new StringBuilder();
+
+		for(int i = 0; i < data.length; ++i) {
+			sb.append(data[i]);
+			if(i < data.length - 1) {
+				sb.append(",");
+			}
+		}
+
+		return sb.toString();
 	}
 
 }

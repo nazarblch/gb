@@ -502,6 +502,8 @@ public class LibRec {
 			}
 		}
 
+		algos[0].saveUserFactors();
+
 		printEvalInfo(algos[0], avgMeasure);
 	}
 
@@ -587,14 +589,6 @@ public class LibRec {
 		}
 
 
-        FileWriter fw = new FileWriter("/Users/nazar/librec/librec/Results/user_factors.txt");
-
-        for (int u: rateMatrix.rows()) {
-            DenseVector fs = algos[0].getUserFactors(u);
-            fw.write(fs.toString() + "\n");
-        }
-
-        fw.close();
 
 		printEvalInfo(algos[0], avgMeasure);
 	}

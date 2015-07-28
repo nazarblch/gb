@@ -59,7 +59,7 @@ public abstract class SocialRecommender extends IterativeRecommender {
 	// initialization
 	static {
 		String socialPath = cf.getPath("dataset.social");
-		Logs.debug("Social dataset: {}", Strings.last(socialPath, 38));
+		//Logs.debug("Social dataset: {}", Strings.last(socialPath, 38));
 
 		socialDao = new DataDAO(socialPath, rateDao.getUserIds());
 

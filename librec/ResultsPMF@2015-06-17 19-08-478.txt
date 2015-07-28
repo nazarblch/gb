@@ -1,0 +1,4 @@
+Dataset: /home/nazar/gb/data/ratings.txt
+With Setup: cv -k 4 -p on --rand-seed 1 --test-view all
+PMF,1.357008,1.849033,0.271402,1.356856,1.849221,0.837318,,10, 0.01, -1.0, 0.1, 0.1, 0.1, 50, true,'00:02','00:00'
+

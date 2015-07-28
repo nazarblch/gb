@@ -23,17 +23,19 @@ class Tokenizer {
   }
 
   def findWords(s: String): Vector[String] = {
-    val modelIn = new FileInputStream("data/en-token.bin")
-    val model = new TokenizerModel(modelIn)
-    modelIn.close()
-    val tokenizer = new TokenizerME(model)
+//    val modelIn = new FileInputStream("data/en-token.bin")
+//    val model = new TokenizerModel(modelIn)
+//    modelIn.close()
+//    val tokenizer = new TokenizerME(model)
+//
+//    val tokens = tokenizer.tokenize(s)
+//    tokens.toVector
+    s.split(" ").filter(_.trim.length > 0).toVector
 
-    val tokens = tokenizer.tokenize(s)
-    tokens.toVector
   }
 
   def removeTrash(s: String): String = {
-    s.replaceAll("[^a-zA-Zа-яА-Я_0-9.]", " ")
+    s.replaceAll("[^a-zA-Zа-яА-Я0-9]", " ")
   }
 
   def stem(s: String): String = {

@@ -27,6 +27,11 @@ import librec.data.DenseMatrix;
 import librec.data.DenseVector;
 import librec.data.SparseMatrix;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+
 /**
  * Recommenders using iterative learning techniques
  * 
@@ -236,6 +241,46 @@ public abstract class IterativeRecommender extends Recommender {
 		}
 
 	}
+
+	public DenseVector getUserFactors(int u) throws Exception {
+		 return P.row(u);
+	}
+
+
+    @Override
+	public void saveUserFactors() throws Exception {
+
+		FileWriter fw = new FileWriter("/home/nazar/gb/librec/Results/P.txt");
+
+		for (int u: rateMatrix.rows()) {
+			DenseVector fs = getUserFactors(u);
+			fw.write(u + " " + fs.toString() + "\n");
+		}
+
+		fw.close();
+	}
+
+	@Override
+	public void loadUserFactors() throws Exception {
+
+		// Open the file
+		FileInputStream fstream = new FileInputStream("/home/nazar/gb/librec/Results/P.txt");
+		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+		String strLine;
+
+		while ((strLine = br.readLine()) != null)   {
+			int u = Integer.parseInt(strLine.split(" ")[0]);
+			for (int c = 0;  c < strLine.split(" ")[1].split(",").length; c++){
+				P.set(u, c, Double.parseDouble(strLine.split(" ")[1].split(",")[c]));
+			}
+		}
+
+		br.close();
+
+	}
+
+
 
 	protected void saveModel() throws Exception {
 		// make a folder

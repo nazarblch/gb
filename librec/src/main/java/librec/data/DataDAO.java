@@ -168,10 +168,10 @@ public class DataDAO {
 	 */
 	public SparseMatrix readData(int[] cols, double binThold) throws Exception {
 
-		if (LibRec.isMeasuresOnly)
-			Logs.debug(String.format("Dataset: %s", Strings.last(dataPath, 38)));
-		else
-			Logs.info(String.format("Dataset: %s", Strings.last(dataPath, 38)));
+		//if (LibRec.isMeasuresOnly)
+			//Logs.debug(String.format("Dataset: %s", Strings.last(dataPath, 38)));
+		//else
+			//Logs.info(String.format("Dataset: %s", Strings.last(dataPath, 38)));
 
 		// Table {row-id, col-id, rate}
 		Table<Integer, Integer, Double> dataTable = HashBasedTable.create();

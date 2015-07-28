@@ -3,7 +3,7 @@
  */
 object EvalPred extends App {
 
-  val err = io.Source.fromFile("/Users/nazar/librec/librec/Results/SVD++-rating-predictions fold [1].txt").getLines().drop(1).map(line => {
+  val err = io.Source.fromFile("/home/nazar/gb/librec/Results/SocialMF-rating-predictions fold [1].txt").getLines().drop(1).map(line => {
     val r1 = line.split(" ")(2).trim.toDouble
     val r2 = line.split(" ")(3).trim.toDouble
 

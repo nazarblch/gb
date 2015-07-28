@@ -1,6 +1,7 @@
 package user
 
-class Wish(val id: Int, val name: String) {
+class Wish private (val id: Int, val name: String) {
+  override def toString = id + " " + name
 }
 
 object Wish {
