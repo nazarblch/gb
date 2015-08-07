@@ -6,6 +6,7 @@ import com.mongodb.casbah.Imports._
 class DBUser(val vkUser: VKUser, val interests: Interests) {
   def toMongoObject: MongoDBObject = {
     MongoDBObject(
+      UsersModel.ID -> vkUser.vkId,
       UsersModel.VKID -> vkUser.vkId,
       UsersModel.TEXT -> vkUser.text,
       UsersModel.GROUP_IDS -> vkUser.groups.map(_.id).toArray,
@@ -62,11 +63,12 @@ object GroupsModel {
 
   def addGroup(g: VKGroup): Unit = {
     val obj = MongoDBObject(
+      ID -> g.id,
       GID -> g.id,
       NAME -> g.name,
       TEXT -> g.text)
 
-    val q = MongoDBObject(GID -> g.id)
+    val q = MongoDBObject(ID -> g.id)
 
     if (db.find(q).count() == 0) db.insert(obj)
   }
