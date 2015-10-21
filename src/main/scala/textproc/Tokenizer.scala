@@ -48,17 +48,9 @@ class Tokenizer {
   }
 
   def apply(s: String): Vector[String] = {
-    findSent(removeTrash(s)).flatMap(s => findWords(s)).map(stem).map(_.toLowerCase)
+    findWords(removeTrash(s)).map(_.toLowerCase).map(stem).filter(_.length > 1)
   }
 
-  def apply(ss: IndexedSeq[String]): IndexedSeq[String] = {
-    var i = 0
-    ss.map(removeTrash).map(s => {
-      //println(s)
-      if (i % 1000 == 0) println(i)
-      i = i + 1
-      s.split(" ").map(stem).map(_.toLowerCase).mkString(" ")
-    })
-  }
+
 
 }

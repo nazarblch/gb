@@ -1,12 +1,15 @@
 import java.io.FileWriter
 import java.util.Random
 
+import db.{UsersModel, DBUser}
 import load.{WishesReader, IdVkReader}
 import user.Wish
 
 object CollectUserWish extends App {
 
-
+  class RatingLine(val u: Int, val i: Int, val Rui: Int) {
+    override def toString = u + " " + i + " " + Rui
+  }
 
   val r = new Random(1)
 
@@ -30,14 +33,18 @@ object CollectUserWish extends App {
     }
   }
 
+  def mkRatings(u: DBUser, r_shift: Int): Vector[RatingLine] = {
+    u.interests.get.getData.map(_._2).zipWithIndex.map({case(rr, i) => new RatingLine(u.vkUser.vkId, i + 1, rr + r_shift)})
+  }
 
-  val u2w_filtered = WishesReader.filterUsersWithText( WishesReader.filterUserWish(WishesReader.u2w, 10, 100, 220000) )
+  def toRatingsList(dbUsers: Iterator[DBUser], r_shift: Int): Vector[RatingLine] = {
+      dbUsers.toVector.flatMap(mkRatings(_, r_shift))
+  }
 
-  println(u2w_filtered.size)
 
-  val fw = new FileWriter("/home/nazar/gb/data/ratings.txt")
+  val fw = new FileWriter("/Users/buzun/gb/data/ratings.txt")
 
-  toRatingsList(u2w_filtered, 1).foreach(t => fw.write(t._1 + " " + t._2 + " " + t._3 + "\n"))
+  toRatingsList(new UsersModel().getAllFastWithInterests, 1).foreach(t => fw.write(t.toString + "\n"))
 
   fw.close()
 }

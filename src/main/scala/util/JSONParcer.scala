@@ -15,10 +15,10 @@ object JSONParcer {
 
     if(jsVal.isInstanceOf[JsArray]) {
       jsVal.convertTo[JsArray].elements.foreach(v => buf ++= findAll(v, name))
-    } else {
+    } else if (jsVal.isInstanceOf[JsObject]) {
 
       jsVal.asJsObject.fields.foreach({ case (k, v) =>
-        if ((k equals name) && (v.isInstanceOf[JsString] || v.isInstanceOf[String])) buf += v.convertTo[String]
+        if ((k equals name) && v.isInstanceOf[JsString]) buf += v.convertTo[String]
         else if (v.isInstanceOf[JsObject] || v.isInstanceOf[JsArray]) buf ++= findAll(v, name)
       })
 

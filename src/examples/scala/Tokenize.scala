@@ -1,8 +1,16 @@
-import textproc.{Text2VecSeq, Word2Vec, Tokenizer}
+import java.io.FileWriter
+
+import load.GoogleTable
+import textproc.{Distance, Text2VecSeq, Word2Vec, Tokenizer}
 
 object Tokenize extends App {
 
-  val vecs = Text2VecSeq.apply("Трансляции матчей Чемпионата,Мира по футболу 2014 из Бразилии на 3 метровом проекторе+++")
+  val toc = new Tokenizer
 
-  vecs.foreach(a => println(a.mkString(",")))
+  val table = new GoogleTable()
+
+
+
+
+
 }

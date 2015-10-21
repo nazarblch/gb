@@ -1,15 +1,8 @@
 package user
 
+import db.VKUser
 import textproc.{Text2VecSeq, Tokenizer}
 
-
-class User(val id: Int, val wallText: String, val gropsText: Seq[Group]) {
-
-  val tok = new Tokenizer
-
-  def getText: String = tok.removeTrash(gropsText.map(_.getShortText(30)).mkString(" . ") + " . " + wallText).split(" ").
-    filter(_.trim.length > 1).mkString(" ")
-}
 
 class MetricUser(val id: Int, val textCoordinates: IndexedSeq[Array[Double]]) {
   override def toString = id + " " + textCoordinates.map(_.mkString(",")).mkString(";")
@@ -55,9 +48,9 @@ class VectorUser(val id: Int, val coord: Vector[Double]) {
 
 object MetricUser {
 
-  def apply(u: User): MetricUser = {
+  def apply(u: VKUser): MetricUser = {
     val data = Text2VecSeq.apply(u.getText)
-    new MetricUser(u.id, data)
+    new MetricUser(u.vkId, data)
   }
 
   def apply(s: String): MetricUser = {

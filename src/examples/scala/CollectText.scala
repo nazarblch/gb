@@ -1,6 +1,8 @@
 import java.io.FileWriter
 
+import db.{UsersModel, GroupsModel}
 import textproc.Tokenizer
+import util.WriteSeq
 
 
 object CollectText extends App {
@@ -9,13 +11,12 @@ object CollectText extends App {
     io.Source.fromFile(path).getLines().take(n).toVector
   }
 
-  def getGroupsText(path: String, n: Int = 1000): IndexedSeq[String] = {
-    io.Source.fromFile(path).getLines().take(n)
-      .map(line => {
-        if (line.split("\\|").length > 2)
-        Some(line.split("\\|")(1) + " " + line.split("\\|")(2))
-        else None
-    }).filter(_.isDefined).map(_.get).toVector
+  def getGroupsText: IndexedSeq[String] = {
+     GroupsModel.getAll.map(g => g.name + "\n" + g.text).toVector
+  }
+
+  def getWallsText: IndexedSeq[String] = {
+    new UsersModel().getAllFast.map(u => u.vkUser.text).toVector
   }
 
   def getWishesText(path: String, n: Int = 1000): IndexedSeq[String] = {
@@ -27,34 +28,10 @@ object CollectText extends App {
     }).filter(_.isDefined).map(_.get).toVector
   }
 
-  def getWallsText(path: String, n: Int = 1000): IndexedSeq[String] = {
-    io.Source.fromFile(path).getLines().take(n)
-      .map(line => {
-      if (line.split("\\|").length > 3)
-        Some(line.split("\\|")(3))
-      else None
-    }).filter(_.isDefined).map(_.get).toVector
-  }
 
+  val text = (getGroupsText ++ getWallsText).filter(_.trim.length > 100)
+  val fw1 = new FileWriter("/Users/buzun/trunk/text_mongo.txt")
+  text.foreach(s => fw1.write(s + "\n"))
 
-  val nn = 100000
-
-
-  val text = // getText("/home/nazar/trunk/text8", nn) ++
-             getText("/home/nazar/trunk/text1", nn)++
-             getGroupsText("/home/nazar/Downloads/v0/groups.csv", nn) ++
-             getWallsText("/home/nazar/Downloads/v0/walls.csv", nn) ++
-             getWishesText("/home/nazar/Downloads/v0/wishes.csv", nn)
-
-
-
-  val toc = new Tokenizer
-  val toc_text = toc(text)
-
-  val fw = new FileWriter("/home/nazar/trunk/text_all")
-
-  fw.write(toc_text.mkString(" "))
-
-  fw.close()
 
 }

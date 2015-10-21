@@ -1,45 +1,35 @@
 import java.io.FileWriter
 
+import db.UsersModel
 import load.IdVkReader
 import textproc.Tokenizer
+import util.WriteSeq
 
 import scala.io.Source
 
 object Text2ClVec extends App {
 
-  val w2cl: Map[String, Int] = io.Source.fromFile("/home/nazar/trunk/w2cl.txt").getLines().toVector
+  val w2cl: Map[String, Int] = io.Source.fromFile("/Users/buzun/trunk/w2cl.txt").getLines().toVector
     .map(line => (line.split(" ")(0), line.split(" ")(1).toInt)).toMap
 
-  val cl2c = w2cl.values.groupBy(x => x).map(p => (p._1, p._2.size)).toMap
-  val dim  = cl2c.size
-
-  val toc = new Tokenizer
+  val dim  = w2cl.values.max
 
   def phr2cls(phr: String): Vector[Int] = {
-    toc.removeTrash(phr).split(" ").toVector.map(_.toLowerCase.trim).map(toc.stem).map(w2cl.getOrElse(_, -1))
-      .filter(_ != -1)
+    phr.split(" ").toVector.map(w => {
+      if (w2cl.get(w).isEmpty) println(w)
+      w2cl.getOrElse(w, -1)
+    }).filter(_ != -1)
   }
 
-  def cls2vec(cls: Vector[Int]): Vector[Double] = {
-    val v = Array.fill[Double](dim)(0.0)
-    cls.groupBy(x => x).toVector.foreach(p => v(p._1) = p._2.size.toDouble / cl2c.get(p._1).get)
-    val norm = v.sum
-    v.map(_ / norm).toVector
-  }
-
-  val u2cls: Vector[(Int, Vector[Double])] = io.Source.fromFile("/home/nazar/gb/data/Users.txt").getLines()
-    .filter(l => IdVkReader.activeVkIds.contains(l.split(" ")(0).toInt))
-    .toVector
-    .map(line => (line.split(" ")(0).toInt, cls2vec(phr2cls(line.split(" ").drop(1).mkString(" ")))))
 
 
-  val fw = new FileWriter("/home/nazar/gb/data/User2ClVec.txt")
+//  UsersModel.getAll.foreach(u => {
+//    val cls =  phr2cls(u.vkUser.text)
+//    UsersModel.addNumericText(u, cls)
+//  })
 
-  u2cls.foreach({case(id, vec) =>
-      fw.write(id + " " + vec.mkString(",") + "\n")
-  })
 
-  fw.close()
+  WriteSeq( w2cl.groupBy(_._2).mapValues(v => v.keys).toVector.sortBy(_._1).map({case(k,v) => k + "|" +  v.mkString(" ")}), "/Users/buzun/gb/data/cl.txt")
 
 
 }

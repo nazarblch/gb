@@ -1,6 +1,5 @@
 package load
 
-import user.User
 
 /**
  * Created by nazar on 7/2/15.

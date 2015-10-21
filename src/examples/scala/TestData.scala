@@ -1,22 +1,32 @@
-import load.{WishesReader, UserById}
-import textproc.Text2VecSeq
+import db.{DBInterest, InterestsModel, TopicGroupsModel}
+import load.vk.API
+import load.{TopicsVKGroupsTable, GoogleTable, WishesReader, UserById}
+import textproc.{Distance, Text2VecSeq}
+import util.JSONParcer
 
 /**
  * Created by nazar on 7/2/15.
  */
 object TestData extends App {
 
-  //val data = io.Source.fromFile("/home/nazar/gb/data/data.txt").getLines().take(2).toVector.last
 
-  //data.split(";").map(s => s.split(",").map(_.toDouble)).map(v => Text2VecSeq.findWord(v)).foreach(println)
-
-  //println(UserById.get(178).split(" ").foreach(println))
-
-  val labels = io.Source.fromFile("/home/nazar/gb/data/labels.txt").getLines().flatMap(_.split(",").map(_.toInt)).toVector
-
-  println(labels.sum.toDouble / 5000)
+  TopicGroupsModel.drop()
 
 
 
-  //println(WishesReader.u2w.get(178).mkString(" "))
+  //val gr = API.getGroup("club12208099")
+
+  val table = new TopicsVKGroupsTable()
+
+  val title2gr = table.activeCols.map(c => table.getWordsWithHeader(c))
+
+  val gr2titles = title2gr.flatMap({case(title, gnames) => gnames.map(name => (name, title))}).groupBy(_._1).mapValues(_.map(_._2))
+
+  gr2titles.foreach({case(gname, titles) =>
+      val interests: Vector[DBInterest] = titles.map(InterestsModel.getInterestByStr).map(_.get)
+      val gr = API.getGroup(gname)
+      println(gname, gr)
+      if (gr.isDefined) TopicGroupsModel.addGroup(gr.get, interests)
+  })
+
 }

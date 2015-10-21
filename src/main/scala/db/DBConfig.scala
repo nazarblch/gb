@@ -2,7 +2,7 @@ package db
 
 object DBConfig {
 
-  val dbname = "gbmain"
+  val dbname = "gbclean"
   val interestsSize = 217
 
 }
